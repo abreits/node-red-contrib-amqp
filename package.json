@@ -21,7 +21,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/abreits/node-red-contrib-amqp.git"
+    "url": "https://github.com/abreits/node-red-contrib-amqp"
   },
   "dependencies": {
     "amqp-ts": "^0.14.0"
