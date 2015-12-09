@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-amqp",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Node-RED AMQP input and output nodes",
   "main": "index.js",
   "scripts": {
