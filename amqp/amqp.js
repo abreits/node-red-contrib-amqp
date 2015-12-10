@@ -42,14 +42,22 @@ module.exports = function(RED) {
     if (node.server) {
       node.status({fill:"red",shape:"ring",text:"common.status.disconnected"});
       var src = getSrc(node);
+      src.initialized.then(function () {
+        node.status({fill:"green",shape:"dot",text:"common.status.connected"});
+      }).catch(function (e) {
+        node.status({fill:"red",shape:"dot",text:"common.status.error"});
+        node.error('AMQP input error: ' + e.message);
+      });
+
       src.activateConsumer(Consume, {noAck: true}).then(function () {
         node.status({fill:"green",shape:"dot",text:"common.status.connected"});
       }).catch(function (e) {
+        node.status({fill:"red",shape:"dot",text:"common.status.error"});
         node.error('AMQP input error: ' + e.message);
       });
 
       node.on("close", function() {
-        src.close();
+        node.status({fill:"red",shape:"ring",text:"common.status.disconnected"});
       });
     } else {
       node.error('AMQP output error: missing AMQP server configuration');
@@ -75,6 +83,7 @@ module.exports = function(RED) {
       src.initialized.then(function () {
         node.status({fill:"green",shape:"dot",text:"common.status.connected"});
       }).catch(function (e) {
+        node.status({fill:"red",shape:"dot",text:"common.status.error"});
         node.error('AMQP output error: ' + e.message);
       });
 
@@ -89,7 +98,7 @@ module.exports = function(RED) {
       });
 
       node.on("close", function() {
-        src.close();
+        node.status({fill:"red",shape:"ring",text:"common.status.disconnected"});
       });
     } else {
       node.error('AMQP output error: missing AMQP server configuration');
@@ -110,22 +119,25 @@ module.exports = function(RED) {
     node.topology = n.topology;
 
     // Create the connection url for the AMQP server
-    var url = node.useTls ? 'amqps://' : 'amqp://';
-    if (node.credentials) {
-      url += node.credentials.user + ':' + node.credentials.password + '@';
+    var urlType = node.useTls ? 'amqps://' : 'amqp://';
+    var credentials = '';
+    if (node.credentials.user) {
+      credentials = node.credentials.user + ':' + node.credentials.password + '@';
     }
-    url += node.host + ':' + node.port;
+    var urlLocation = node.host + ':' + node.port;
     if (node.vhost) {
-      url += '/' + node.vhost;
+      urlLocation += '/' + node.vhost;
     }
     if (node.keepAlive) {
-      url += '?heartbeat=' + node.keepAlive;
+      urlLocation += '?heartbeat=' + node.keepAlive;
     }
 
-    node.connection = new amqp.Connection(url);
+    console.log('trying to connect to: ' + urlType + credentials + urlLocation);
+
+    node.connection = new amqp.Connection(urlType + credentials + urlLocation);
     node.connection.initialized.then(function () {
-      node.log('Connected to AMQP server ' + node.host);
-    }).catch(function () {
+      node.log('Connected to AMQP server ' + urlType + urlLocation);
+    }).catch(function (e) {
       node.error('AMQP-SERVER error: ' + e.message);
     });
 
@@ -154,5 +166,10 @@ module.exports = function(RED) {
   // Node functions.
   RED.nodes.registerType("amqp in", AmqpIn);
   RED.nodes.registerType("amqp out", AmqpOut);
-  RED.nodes.registerType("amqp-server", AmqpServer);
+  RED.nodes.registerType("amqp-server", AmqpServer, {
+    credentials: {
+      user: {type:"text"},
+      password: {type: "password"}
+    }
+  });
 };
