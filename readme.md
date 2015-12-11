@@ -1,9 +1,10 @@
 Node-RED AMQP input and output nodes
 ====================================
 
-node-red-contrib-amqp contains an input, an output and a configuration node to connect to a AMQP exchanges or queues for Node-RED.
 
-It uses the [amqp-ts](https://github.com/abreits/amqp-ts) library for the AMQP connitivity.
+`node-red-contrib-amqp` is a [Node-RED](http://nodered.org/docs/creating-nodes/packaging.html) package that connects directly to an AMQP server (e.g. [RabbitMQ](https://www.rabbitmq.com/)). It contains an input, an output and a configuration node to connect to AMQP exchanges or queues for Node-RED.
+
+It uses the [amqp-ts](https://github.com/abreits/amqp-ts) library for the AMQP connectivity.
 
 
 ## Table of Contents
@@ -14,7 +15,7 @@ It uses the [amqp-ts](https://github.com/abreits/amqp-ts) library for the AMQP c
 - [Roadmap](#roadmap)
 
 
-##Installation     <a name="installation"></a>
+## Installation     <a name="installation"></a>
 
 If you have installed Node-RED as a global node.js package (you use the command `node-red` anywhere to start it), you need to install
 node-red-contrib-amqp as a global package as well:
@@ -23,17 +24,17 @@ node-red-contrib-amqp as a global package as well:
 $[sudo] npm install -g node-red-contrib-amqp
 ```
 
-If you have cloned your own copy of Node-RED from github, you can install it as a normal npm package inside the Node-RED project:
+If you have installed the .zip or cloned your own copy of Node-RED from github, you can install it as a normal npm package inside the Node-RED project directory:
 
 ```
-<path/to/node-red>$ npm install node-red-contrib-amqp [--save]
+<path/to/node-red>$ npm install node-red-contrib-amqp
 ```
 
-##Overview     <a name="overview"></a>
+## Overview     <a name="overview"></a>
 
 The package contains the following Node-RED nodes:
 
-###AMQP input node
+### input: amqp
 
 Subscribes to an AMQP exchange or queue and reads messages from it. It outputs an object called
 `msg` containing the following fields:
@@ -44,9 +45,9 @@ Subscribes to an AMQP exchange or queue and reads messages from it. It outputs a
 
 If a topic is defined in the input node definition, that will be sent as `msg.topic` instead of the routing key.
 
-In the settings you can only define the exchange type or queue and it's name. If you need to use an exchange or a queue with specific settings you can define the exchange or queue in the **topology** tab of the AMQP server configuration node. The input node will use the exchange or queue defined in the topology.
+In the settings you can only define the exchange type or queue and it's name. If you need to use an exchange or a queue with specific settings you can define the exchange or queue in the [topology](#topology) tab of the AMQP server configuration node. The input node will use the exchange or queue defined in the topology.
 
-###AMQP output node
+### output: amqp
 
 Delivers incoming the message payload to the specified exchange or queue. It expects an object called
 `msg` containing the following fields:
@@ -59,11 +60,11 @@ If a topic is defined in the output node definition, that will be sent as routin
 
 In the settings you can only define the exchange type or queue and it's name. If you need to use an exchange or a queue with specific settings you can define the exchange or queue in the **topology** tab of the AMQP server configuration node. The output node will use the exchange or queue defined in the topology.
 
-###AMQP server configuration node
+### configuration: amqp-server
 
 Defines the connection to the AMQP server. You can also define in more detail the exchanges and queues that are used in the input and output nodes and even define bindings between exchanges and queues in the topology tab.
 
-####topology tab
+#### topology tab     <a name="topology"></a>
 
 In the topology tab you can define the AMQP server exchange and queue topology (exchanges, queues and bindings). You define the topology in the JSON editor.
 
@@ -79,8 +80,8 @@ Topology configuration example:
         {"name": "queue1", "options": {"messageTtl": 60000}},
         {"name": "queue2"}
     ],
-    bindings: [
-        {"source": "exchange1", "queue": "queue1", "pattern": "debug", args: {}},
+    "bindings": [
+        {"source": "exchange1", "queue": "queue1", "pattern": "debug", "args": {}},
         {"source": "exchange1", "exchange": "exchange2", "pattern": "error"},
         {"source": "exchange2", "queue": "queue2"}
     ]
@@ -88,11 +89,16 @@ Topology configuration example:
 ```
 
 
-##Known issues     <a name="knownissues"></a>
-- Entering invalid credentials (username/password) in the configuration node causes node-red to malfunction
+## Known issues     <a name="knownissues"></a>
+- Entering invalid credentials (username/password) in the AMQP configuration node can cause node-red to malfunction
 
 
-##What's new     <a name="whatsnew"></a>
+## What's new     <a name="whatsnew"></a>
+
+### version 0.3.0
+- connection to AMQP server now only established when amqp input and/or AMQP output nodes exist
+- major refactor and code cleanup
+- fixed errors in readme
 
 ### version 0.2.0
 - fixed user credentials not working
@@ -106,8 +112,6 @@ Topology configuration example:
 
 The roadmap section describes things that I want to add or change in the (hopefully near) future.
 
-- Add better documentation
-- Make package working for node-red
+- Add extra features
 - Make testable
 - Add localization
-- Add extra features

@@ -228,7 +228,7 @@
             password: {type: "password"}
         },
         label: function() {
-            return this.host +':' + this.port;
+            return (this.host || 'localhost') + (this.port ? ':' + this.port : '');
         },
         oneditprepare: function () {
             var tabs = RED.tabs.create({
