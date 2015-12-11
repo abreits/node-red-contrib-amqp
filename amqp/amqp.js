@@ -184,7 +184,7 @@ module.exports = function(RED) {
         node.connection.close().then(function () {
           node.connection = null;
           node.connectionPromise = null;
-          node.log('Connected to AMQP server ' + node.host + ' closed');
+          node.log('AMQP server connection ' + node.host + ' closed');
         }).catch(function (e) {
           node.error('AMQP-SERVER error closing connection: ' + e.message);
         });
