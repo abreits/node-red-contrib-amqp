@@ -95,6 +95,11 @@ Topology configuration example:
 
 ## What's new     <a name="whatsnew"></a>
 
+### version 0.4.0
+- major refactor, made preparations for better testable code:
+  - javascript source code has been translated to typescript
+  - gulp build system added
+
 ### version 0.3.0
 - connection to AMQP server now only established when amqp input and/or AMQP output nodes exist
 - major refactor and code cleanup
