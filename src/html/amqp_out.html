@@ -1,0 +1,45 @@
+<!-- AMQP OUT ----------------------------------------------------------------->
+
+<script type="text/x-red" data-template-name="amqp out">
+    <div class="form-row">
+        <label for="node-input-server"><i class="fa fa-globe"></i> Server</label>
+        <input type="text" id="node-input-server">
+    </div>
+    <div class="form-row">
+        <label for="node-input-ioname"><i class="fa fa-filter"></i> Send to</label>
+        <select id="node-input-iotype">
+          <option value="0">direct exchange</option>
+          <option value="1">fanout exchange</option>
+          <option value="2">headers exchange</option>
+          <option value="3">topic exchange</option>
+          <option value="4">queue</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <label for="node-input-ioname"></label>
+        <input type="text" id="node-input-ioname" placeholder="AMQP exchange or queue name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-routingkey"><i class="fa fa-tasks"></i> Routing key</label>
+        <input type="text" id="node-input-routingkey" placeholder="Leave empty to use the topic of the message">
+    </div>
+
+    <br/>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="amqp out">
+   <p>AMQP output node. Connects to a server and delivers the message payload to the specified exchange or queue.</p>
+   <p>Expects an object called
+   <b>msg</b> containing <b>msg.payload</b> and optionally <b>msg.topic</b> and <b>msg.options</b>. If <b>msg.payload</b> does not exist, the whole msg object will be sent</p>
+   <p>
+   <b>msg.payload</b>: string or an object containing the content of the AMQP message.<br>
+   <b>msg.topic</b>: string containing the routing-key of the AMQP message.<br>
+   <b>msg.options</b>: object containing specific AMQP properties for the message to be sent, see the.
+   <a href="http://www.squaremobius.net/amqp.node/channel_api.html#channel_publish" target="_blank"><b>amqplib publish</b></a>
+   documentation for more information.
+   </p>
+</script>

@@ -1,0 +1,45 @@
+<!-- AMQP IN ------------------------------------------------------------------>
+
+<script type="text/x-red" data-template-name="amqp in">
+    <div class="form-row">
+        <label for="node-input-server"><i class="fa fa-globe"></i> Source</label>
+        <input type="text" id="node-input-server" placeholder="AMQP server">
+    </div>
+    <div class="form-row">
+        <label for="node-input-ioname"><i class="fa fa-filter"></i> Read from</label>
+        <select id="node-input-iotype">
+          <option value="0">direct exchange</option>
+          <option value="1">fanout exchange</option>
+          <option value="2">headers exchange</option>
+          <option value="3">topic exchange</option>
+          <option value="4">queue</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <label for="node-input-srcname"></label>
+        <input type="text" id="node-input-ioname" placeholder="AMQP exchange or queue name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-topic"><i class="fa fa-tasks"></i> Topic</label>
+        <input type="text" id="node-input-topic" placeholder="Leave empty to use the message routing key">
+    </div>
+
+    <br/>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="amqp in">
+   <p>AMQP input node. Connects to a server and subscribes to the specified exchange or queue.</p>
+   <p>Outputs an object called
+   <b>msg</b> containing <b>msg.topic</b>, <b>msg.payload</b> and <b>msg.amqpMessage</b>.</p>
+   <p>
+   <b>msg.topic</b> is a string containing the routing-key of the AMQP message.
+   <b>msg.payload</b> is a string or an object containing the content of the AMQP message.
+   <b>msg.amqpMessage</b> is an
+   <a href="https://github.com/abreits/amqp-ts/wiki/Message%20class" target="_blank"><b>amqp-ts Message</b></a>
+   object containing the received message.sendto
+   </p>
+</script>
