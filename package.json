@@ -14,7 +14,7 @@
   ],
   "node-red": {
     "nodes": {
-      "amqp": "lib/amqp.js"
+      "amqp": "amqp/amqp.js"
     }
   },
   "author": "Ab Reitsma",

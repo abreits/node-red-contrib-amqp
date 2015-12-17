@@ -99,7 +99,7 @@ gulp.task('copy-to-lib', ['compile'], function () {
   ])
   .pipe(concat('amqp.html'))
   .pipe(addsrc.append(['transpiled/nodejs/*.js', '!transpiled/nodejs/*.spec.js']))
-  .pipe(gulp.dest('lib'));
+  .pipe(gulp.dest('amqp'));
 });
 
 
