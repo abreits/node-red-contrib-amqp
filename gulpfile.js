@@ -13,6 +13,8 @@ var tslint = require('gulp-tslint');
 var sourcemaps = require('gulp-sourcemaps');
 var mocha = require('gulp-spawn-mocha');
 
+var node_red_root = process.env.NODE_RED_ROOT;
+
 // swallow errors in watch
 function swallowError (error) {
 
@@ -31,7 +33,7 @@ var tsProject = ts.createProject({
 
 gulp.task('default', ['build:clean']);
 
-gulp.task('build', ['compile', 'copy-to-lib', 'test']);
+gulp.task('build', ['compile', 'copy-to-lib', 'test', 'copy-to-node-red']);
 gulp.task('build:clean', ['clean', 'compile', 'test']);
 
 gulp.task('watch', ['clean', 'build'], function () {
@@ -102,6 +104,12 @@ gulp.task('copy-to-lib', ['compile'], function () {
   .pipe(gulp.dest('lib'));
 });
 
+gulp.task('copy-to-node-red', ['copy-to-lib'], function () {
+  if (node_red_root) {
+    return gulp.src(['lib/*.*'])
+    .pipe(gulp.dest(node_red_root + '/node_modules/node-red-contrib-amqp/lib'));
+  }
+});
 
 // unit tests, more a fast integration test because at the moment it uses an external AMQP server
 gulp.task('test', ['copy-to-lib'], function () {
