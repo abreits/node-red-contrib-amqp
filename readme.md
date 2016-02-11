@@ -95,6 +95,9 @@ Topology configuration example:
 
 ## What's new     <a name="whatsnew"></a>
 
+### version 0.4.1
+- bugfix, fixed routingkey not working in configuration/definition (thanks to exogenesick)
+
 ### version 0.4.0
 - major refactor, made preparations for better testable code:
   - javascript source code has been translated to typescript
