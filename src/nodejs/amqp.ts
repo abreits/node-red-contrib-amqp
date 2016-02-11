@@ -1,7 +1,9 @@
+import * as amqp from "amqp-ts";
+
 module.exports = function(RED) {
   "use strict";
-  var amqp = require("amqp-ts");
-  var exchangeTypes = ["direct", "fanout", "headers", "topic"];
+
+  const exchangeTypes = ["direct", "fanout", "headers", "topic"];
 
   function initialize(node) {
     if (node.server) {
