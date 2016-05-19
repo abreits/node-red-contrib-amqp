@@ -126,7 +126,7 @@ RED.nodes.registerType("amqp-server", {
                 functionDialogResize();
             }
         });
-        $("#node-config-dialog").one("dialogclose", function(ev, ui) {
+        $("#node-config-dialog").one("dialogclose", function(ev) {
             var height = $("#node-config-dialog").dialog("option", "height");
             $("#node-config-dialog").off("dialogresize", functionDialogResize);
         });
