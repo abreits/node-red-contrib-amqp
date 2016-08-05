@@ -122,11 +122,11 @@
                 <label for="node-config-input-password"><i class="fa fa-lock"></i> Password</label>
                 <input type="password" id="node-config-input-password" >
             </div>
-            <div class="form-row">
+            <div class="form-row" style="display:none">
                 <input type="checkbox" id="node-config-input-usetls" style="display: inline-block; width: auto; vertical-align: top;">
                 <label for="node-config-input-usetls" style="width: 70%;"> Enable secure (SSL/TLS) connection</label>
             </div>
-            <div class="form-row">
+            <div class="form-row" style="display:none">
                 <input type="checkbox" id="node-config-input-verifyservercert" style="display: inline-block; width: auto; vertical-align: top;">
                 <label for="node-config-input-verifyservercert" style="width: 70%;"> Verify server certificate</label>
             </div>
@@ -256,20 +256,19 @@ RED.nodes.registerType("amqp-server", {
             label: "Topology"
         });
         setTimeout(function () { tabs.resize(); }, 0);
-        function updateTLSOptions() {
-            if ($("#node-config-input-usetls").is(":checked")) {
-                $("#node-config-input-verifyservercert").prop("disabled", false);
-                $("#node-config-input-verifyservercert").next().css("color", "");
-            }
-            else {
-                $("#node-config-input-verifyservercert").prop("disabled", true);
-                $("#node-config-input-verifyservercert").next().css("color", "#aaa");
-            }
-        }
-        updateTLSOptions();
-        $("#node-config-input-usetls").on("click", function () {
-            updateTLSOptions();
-        });
+        // function updateTLSOptions() {
+        //     if ($("#node-config-input-usetls").is(":checked")) {
+        //         $("#node-config-input-verifyservercert").prop("disabled", false);
+        //         $("#node-config-input-verifyservercert").next().css("color", "");
+        //     } else {
+        //         $("#node-config-input-verifyservercert").prop("disabled", true);
+        //         $("#node-config-input-verifyservercert").next().css("color", "#aaa");
+        //     }
+        // }
+        // updateTLSOptions();
+        // $("#node-config-input-usetls").on("click", function() {
+        //     updateTLSOptions();
+        // });
         // use editor
         var topologyField = $("#node-config-input-topology");
         this.editor = RED.editor.createEditor({
