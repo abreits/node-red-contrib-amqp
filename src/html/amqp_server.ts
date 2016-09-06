@@ -97,6 +97,9 @@ RED.nodes.registerType("amqp-server", {
             // var topologyTab = $("#amqp-server-tab-topology");
             // if(topologyTab.)
             var height = $("#dialog-config-form").height();
+            if (height === null) {
+                height = $(".editor-tray-body").height();
+            }
             height -= $("#node-config-amqp-server-tabs").outerHeight(true);
             console.log("height:" + height + "px");
             var rows = $("#amqp-server-tab-topology>div:not(.node-text-editor-row)");
@@ -113,6 +116,9 @@ RED.nodes.registerType("amqp-server", {
             }
             height -= 5;
             console.log(height);
+            if (height < 100) {
+                height = 400;
+            }
             $(".node-text-editor").css("height", height + "px");
             console.log("height:" + height + "px");
             editor.resize();
