@@ -122,13 +122,22 @@
                 <label for="node-config-input-password"><i class="fa fa-lock"></i> Password</label>
                 <input type="password" id="node-config-input-password" >
             </div>
-            <div class="form-row" style="display:none">
+            <div class="form-row">
                 <input type="checkbox" id="node-config-input-usetls" style="display: inline-block; width: auto; vertical-align: top;">
                 <label for="node-config-input-usetls" style="width: 70%;"> Enable secure (SSL/TLS) connection</label>
             </div>
             <div class="form-row" style="display:none">
                 <input type="checkbox" id="node-config-input-verifyservercert" style="display: inline-block; width: auto; vertical-align: top;">
                 <label for="node-config-input-verifyservercert" style="width: 70%;"> Verify server certificate</label>
+            </div>
+            <div class="form-row">
+                <input type="checkbox" id="node-config-input-useca" style="display: inline-block; width: auto; vertical-align: top;">
+                <label for="node-config-input-usetls" style="width: 70%;"> Use Credentials</label>
+            </div>
+
+            <div class="form-row node-text-editor-row">
+                <label for="node-config-input-ca" style="width: 70%;">Credential</label>
+                <textarea id="node-config-input-ca" style="resize: vertical; width:100%; height: 10em"></textarea>
             </div>
         </div>
         <div id="amqp-server-tab-topology" style:"display: none;">
@@ -208,6 +217,8 @@ RED.nodes.registerType("amqp-server", {
         keepalive: { value: 30, validate: RED.validators.number() },
         usetls: { value: false },
         verifyservercert: { value: true },
+        useca: { value: false },
+        ca: { value: "" },
         usetopology: { value: false },
         topology: { value: "{\n" +
                 "\t\"exchanges\": [\n" +
@@ -256,6 +267,18 @@ RED.nodes.registerType("amqp-server", {
             label: "Topology"
         });
         setTimeout(function () { tabs.resize(); }, 0);
+        function updateCAStatus() {
+            if ($("#node-config-input-useca").is(":checked")) {
+                $("#node-config-input-ca").prop("disabled", false);
+            }
+            else {
+                $("#node-config-input-ca").prop("disabled", true);
+            }
+        }
+        updateCAStatus();
+        $("#node-config-input-useca").on("click", function () {
+            updateCAStatus();
+        });
         // function updateTLSOptions() {
         //     if ($("#node-config-input-usetls").is(":checked")) {
         //         $("#node-config-input-verifyservercert").prop("disabled", false);

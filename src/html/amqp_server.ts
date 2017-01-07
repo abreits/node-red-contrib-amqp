@@ -13,6 +13,8 @@ RED.nodes.registerType("amqp-server", {
         keepalive: { value: 30, validate: RED.validators.number() },
         usetls: { value: false },
         verifyservercert: { value: true },
+		useca: { value: false },
+		ca: { value: "" },
         usetopology: { value: false },
         topology: { value: "{\n" +
                             "\t\"exchanges\": [\n" +
@@ -61,6 +63,20 @@ RED.nodes.registerType("amqp-server", {
             label: "Topology"
         });
         setTimeout(function() { tabs.resize(); }, 0);
+
+		function updateCAStatus() {
+			if ($("#node-config-input-useca").is(":checked")) {
+				$("#node-config-input-ca").prop("disabled", false);
+			} else {
+				$("#node-config-input-ca").prop("disabled", true);
+			}
+		}
+
+		updateCAStatus();
+
+		$("#node-config-input-useca").on("click", function() {
+			updateCAStatus();
+		});
 
         // function updateTLSOptions() {
         //     if ($("#node-config-input-usetls").is(":checked")) {
