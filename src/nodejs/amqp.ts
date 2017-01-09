@@ -138,6 +138,7 @@ module.exports = function(RED) {
     node.useTls = n.usetls;
     node.useTopology = n.usetopology;
     node.topology = n.topology;
+	node.ca = n.ca || null;
 
     node.clientCount = 0;
     node.connectionPromise = null;
@@ -158,7 +159,18 @@ module.exports = function(RED) {
         if (node.keepAlive) {
           urlLocation += "?heartbeat=" + node.keepAlive;
         }
-        node.connection = new amqp.Connection(urlType + credentials + urlLocation);
+
+		var opt = {
+			ca: []
+		};
+
+		if (node.ca) {
+		console.log(node.ca);
+		console.log(urlType + credentials + urlLocation);
+			opt.ca.push(new Buffer(node.ca, "base64"));
+		}
+
+        node.connection = new amqp.Connection(urlType + credentials + urlLocation, opt);
         node.connectionPromise = node.connection.initialized.then(function () {
           node.log("Connected to AMQP server " + urlType + urlLocation);
         }).catch(function (e) {

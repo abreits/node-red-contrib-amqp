@@ -30,13 +30,22 @@
                 <label for="node-config-input-password"><i class="fa fa-lock"></i> Password</label>
                 <input type="password" id="node-config-input-password" >
             </div>
-            <div class="form-row" style="display:none">
+            <div class="form-row">
                 <input type="checkbox" id="node-config-input-usetls" style="display: inline-block; width: auto; vertical-align: top;">
                 <label for="node-config-input-usetls" style="width: 70%;"> Enable secure (SSL/TLS) connection</label>
             </div>
             <div class="form-row" style="display:none">
                 <input type="checkbox" id="node-config-input-verifyservercert" style="display: inline-block; width: auto; vertical-align: top;">
                 <label for="node-config-input-verifyservercert" style="width: 70%;"> Verify server certificate</label>
+            </div>
+            <div class="form-row">
+                <input type="checkbox" id="node-config-input-useca" style="display: inline-block; width: auto; vertical-align: top;">
+                <label for="node-config-input-usetls" style="width: 70%;"> Use Credentials</label>
+            </div>
+
+            <div class="form-row node-text-editor-row">
+                <label for="node-config-input-ca" style="width: 70%;">Credential:</label>
+                <textarea id="node-config-input-ca" style="resize: vertical; width:100%; height: 10em"></textarea>
             </div>
         </div>
         <div id="amqp-server-tab-topology" style:"display: none;">
