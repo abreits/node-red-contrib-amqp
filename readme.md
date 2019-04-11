@@ -95,6 +95,10 @@ Topology configuration example:
 
 ## What's new     <a name="whatsnew"></a>
 
+### version 0.4.5
+- TODO TLS connections use the OS global CA cert correctly.
+- TODO better document the credentials field, whatever the fuck that is for
+
 ### version 0.4.4
 - bugfix, topology editor not visible in amqp-server config node
 

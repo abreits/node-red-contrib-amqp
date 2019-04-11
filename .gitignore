@@ -1,5 +1,10 @@
+# IDE stuff
 .idea
 .vscode
+.settings
+.project
+
+# Build stuff
 coverage
 node_modules
 transpiled
