@@ -122,7 +122,8 @@ module.exports = function(RED) {
     initialize(node);
   }
 
-
+const fs = require("fs");
+const getos = require("getos");
 //
 //-- AMQP SERVER --------------------------------------------------------------
 //
@@ -138,6 +139,7 @@ module.exports = function(RED) {
     node.useTls = n.usetls;
     node.useTopology = n.usetopology;
     node.topology = n.topology;
+    node.useca = n.useca;
 	node.ca = n.ca || null;
 
     node.clientCount = 0;
@@ -164,10 +166,26 @@ module.exports = function(RED) {
 			ca: []
 		};
 
-		if (node.ca) {
-		console.log(node.ca);
-		console.log(urlType + credentials + urlLocation);
-			opt.ca.push(new Buffer(node.ca, "base64"));
+		// TODO still loading file even though use_ca is unchecked
+		// TODO document - desired is, user can enter a different CA file, otherwise the system CA file is used
+		// TODO make it clearer in the GUI what the credentials field is for, probably rename it too
+		if (node.useca) {
+		    console.log("Loading CA file: " + node.ca);
+		    // This writes the password to log, so leave it commented out unless you're debugging locally
+		    //console.log(urlType + credentials + urlLocation);
+		    opt.ca = fs.readFileSync(node.ca);
+		} else {
+		    // TODO try to identify the default cert location for this OS
+		    var retval = null;
+		    getos(function(e, os) {
+		        if (e) {
+		            return console.log(e);
+		        }
+		        console.log("Your OS is:" + JSON.stringify(os));
+		        
+		     }
+		    );
+		    console.log("outside callback " + JSON.stringify(retval));
 		}
 
         node.connection = new amqp.Connection(urlType + credentials + urlLocation, opt);

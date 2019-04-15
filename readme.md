@@ -91,12 +91,18 @@ Topology configuration example:
 
 ## Known issues     <a name="knownissues"></a>
 - Entering invalid credentials (username/password) in the AMQP configuration node can cause node-red to malfunction
+- The above [historical] issue is funny, because I don't know too many things that work correctly when given invalid credentials...
+- The underlying amqplib is pretty old; if this library is maintained, that will need to be brought forward
 
 
 ## What's new     <a name="whatsnew"></a>
 
+TODO CA checkbox/field are still enabled when tls is unchecked
 ### version 0.4.5
-- TODO TLS connections use the OS global CA cert correctly.
+- TODO TLS connections use a default local cert when TODO 'use tls' is checked but 'use ca' is not
+- TODO When 'use tls' and 'use ca' are set, the 'ca' field no longer specifies an explicit certificate, but a local disk location to load.  This is important as many certs have binary data in them, which is incompatible with a copy/paste in NodeRed GUI
+- TODO bugfix, 'use ca' checkbox drives whether to use the 'ca' field - before it would use the field even when
+  the checkbox was unchecked
 - TODO better document the credentials field, whatever the fuck that is for
 
 ### version 0.4.4
