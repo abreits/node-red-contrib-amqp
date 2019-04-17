@@ -166,29 +166,41 @@ const getos = require("getos");
 			ca: []
 		};
 
-		// TODO still loading file even though use_ca is unchecked
-		// TODO document - desired is, user can enter a different CA file, otherwise the system CA file is used
-		// TODO make it clearer in the GUI what the credentials field is for, probably rename it too
-		if (node.useca) {
-		    console.log("Loading CA file: " + node.ca);
-		    // This writes the password to log, so leave it commented out unless you're debugging locally
-		    //console.log(urlType + credentials + urlLocation);
-		    opt.ca = fs.readFileSync(node.ca);
-		} else {
-		    // TODO try to identify the default cert location for this OS
-		    var retval = null;
-		    getos(function(e, os) {
-		        if (e) {
-		            return console.log(e);
-		        }
-		        console.log("Your OS is:" + JSON.stringify(os));
-		        
-		     }
-		    );
-		    console.log("outside callback " + JSON.stringify(retval));
-		}
+		// Get the distribution information so we load the proper CA-cert file
+		getos(function(e, os) {
+            if (e) {
+                return console.log(e);
+            }
+            console.log("Your OS is:" + JSON.stringify(os));
 
-        node.connection = new amqp.Connection(urlType + credentials + urlLocation, opt);
+            // We only need to OS check for TLS connections
+            if (node.useTls) {
+                if (node.useca) {
+                    console.log("Using custom CA file: " + node.ca);
+                    opt.ca = fs.readFileSync(node.ca);
+                } else {
+
+                    var defaultCaFileLocation = "/etc/ssl/certs/ca-certificates.crt";
+
+                    // FUTURE: This block should be locating the proper ca-cert for this distro.
+                    var lowercasedist = os.dist.toLowerCase();
+                    if (lowercasedist.includes("ubuntu") || lowercasedist.includes("alpine")) {
+                        console.log("Ubuntu or Alpine OS detected, using CA file: " + defaultCaFileLocation);
+                        opt.ca = fs.readFileSync(defaultCaFileLocation);
+                    } else { // Alternate OS's would need else-if blocks here
+                        console.log("Unable to determine the local distro, defaulting to CA file: " + defaultCaFileLocation);
+                        opt.ca = fs.readFileSync(defaultCaFileLocation);
+                    }
+                }
+            } else {
+                console.log("Initializing in-clear AMQP connection");
+            }
+
+            node.connection = new amqp.Connection(urlType + credentials + urlLocation, opt);
+         }, node
+        );
+
+		// Wait for initialization
         node.connectionPromise = node.connection.initialized.then(function () {
           node.log("Connected to AMQP server " + urlType + urlLocation);
         }).catch(function (e) {

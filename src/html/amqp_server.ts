@@ -65,6 +65,7 @@ RED.nodes.registerType("amqp-server", {
         setTimeout(function() { tabs.resize(); }, 0);
 
 		function updateCAStatus() {
+		    //node-config-input-useca
 			if ($("#node-config-input-useca").is(":checked")) {
 				$("#node-config-input-ca").prop("disabled", false);
 			} else {
@@ -78,19 +79,21 @@ RED.nodes.registerType("amqp-server", {
 			updateCAStatus();
 		});
 
-        // function updateTLSOptions() {
-        //     if ($("#node-config-input-usetls").is(":checked")) {
-        //         $("#node-config-input-verifyservercert").prop("disabled", false);
-        //         $("#node-config-input-verifyservercert").next().css("color", "");
-        //     } else {
-        //         $("#node-config-input-verifyservercert").prop("disabled", true);
-        //         $("#node-config-input-verifyservercert").next().css("color", "#aaa");
-        //     }
-        // }
-        // updateTLSOptions();
-        // $("#node-config-input-usetls").on("click", function() {
-        //     updateTLSOptions();
-        // });
+        function updateTLSOptions() {
+            if ($("#node-config-input-usetls").is(":checked")) {
+                $("#node-config-input-useca").prop("disabled", false);
+                $("#node-config-input-ca").prop("disabled", false);
+                $("#node-config-input-ca").next().css("color", "");
+            } else {
+                $("#node-config-input-useca").prop("disabled", true);
+                $("#node-config-input-ca").prop("disabled", true);
+                $("#node-config-input-ca").next().css("color", "#aaa");
+            }
+        }
+        updateTLSOptions();
+        $("#node-config-input-usetls").on("click", function() {
+            updateTLSOptions();
+        });
 
         // use editor
         var topologyField = $("#node-config-input-topology");
