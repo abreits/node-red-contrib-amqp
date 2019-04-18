@@ -91,9 +91,27 @@ Topology configuration example:
 
 ## Known issues     <a name="knownissues"></a>
 - Entering invalid credentials (username/password) in the AMQP configuration node can cause node-red to malfunction
+- The underlying amqplib is pretty old; if this library is maintained, that will need to be brought forward
 
 
 ## What's new     <a name="whatsnew"></a>
+
+### version 0.4.5
+- Use Credentials/Credentials fields descriptions changed to 'Use Local CA File' and 'CA File Location' with accompanying functional change:
+- The 'CA File Location' field no longer specifies an explicit certificate, but a local disk location to load
+
+  This is important as many certs have binary data in them, which is incompatible with a copy/paste in NodeRed GUI
+- When a custom CA file location is not specified, an attempt is made to load the default system CA certificate
+
+  Currently default supports ubuntu and alpine. 
+
+  Other distros should contribute their locations to this project as desired, but could still manually enter the location to be able to enjoy the functionality
+- Some small GUI quality of life improvement to disable/enable TLS related fields when TLS enabled checkbox is exercised
+- bugfix, 'Enable secure connection' + 'Use Local CA File' checkbox drives whether to use the 'CA File Location' field;
+
+  before it would use the field even when the checkbox was unchecked
+
+  
 
 ### version 0.4.4
 - bugfix, topology editor not visible in amqp-server config node
