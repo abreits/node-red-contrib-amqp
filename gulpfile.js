@@ -33,15 +33,13 @@ var tsProject = ts.createProject({
   declaration: true
 });
 
-//gulp.task('default', gulp.series('build:clean'));
-
-//gulp.task('build', gulp.series('compile', 'copy-to-lib', 'copy-to-node-red'));
-
-//gulp.task('build:clean', gulp.series('clean', 'compile'));
-
-
 function clean(cb) {
 	del.sync(['coverage', 'transpiled']);
+	cb();
+}
+
+function cleanmodules(cb) {
+	del.sync(['node_modules']);
 	cb();
 }
 
@@ -61,67 +59,35 @@ function compile(cb) {
 	cb();
 }
 
+function lint(cb) {
+	return src('src/**/*.ts')
+		.pipe(tslint({
+			configuration: 'tools/tslint/tslint-node.json'
+			}))
+		.pipe(tslint.report('full'));
+	cb();
+}
 
-exports.default = series(clean, compile);
+// TODO resolve error `Error: Received a non-Vinyl object in `dest()``
+function copytolib(cb) {
+	return src([
+			'src/html/*.html',
+			'tools/concat/js_prefix.html',
+			'transpiled/html/*.js',
+			'tools/concat/js_suffix.html'
+			])
+		.pipe(concat('amqp.html'))
+		.pipe(addsrc.append(['transpiled/nodejs/*.js', '!transpiled/nodejs/*.spec.js']))
+		.pipe(dest('lib'));
+	cb();
+}
 
-
-/*
-gulp.task('clean', function (cb) {
-  del.sync([
-    'coverage',
-    'transpiled'
-  ]);
-  cb();
-});
-*/
-
-
-//gulp.task('compile', function () {
-  // compile typescript
-//  var tsResult = gulp.src('src/**/*.ts')
-//    .pipe(tslint({
-//      configuration: 'tools/tslint/tslint-node.json'
-//    }))
-//    .pipe(tslint.report('prose', {
-//      emitError: false
-//    }))
-//    .pipe(addsrc.prepend('typings*/**/*.d.ts'))
-//    .pipe (ts(tsProject));
-
-//  return tsResult.js.pipe(gulp.dest('transpiled'));
-//});
-
-
-
-
-// TODO what is this for?
-//gulp.task('watch', gulp.series('clean', 'build', function () {
-//  gulp.watch('server/**/*.ts', ['build']);
-//}));
-
-
-
-
-/*
-gulp.task('clean:all', function () {
-  del([
-    'coverage',
-    'transpiled',
-    'node_modules'
-  ]);
-});
-*/
-
-
-
-
-//gulp.task('lint', function () {
-//  return gulp.src('src/**/*.ts')
-//    .pipe(tslint({
-//      configuration: 'tools/tslint/tslint-node.json'
-//    }))
-//    .pipe(tslint.report('full'));
-//});
+exports.build = series(compile, copytolib); // TODO add copy-to-lib, test, copy-to-node-red
+exports.build_clean = series(clean, compile);
+exports.default = exports.build_clean;
+exports.clean = clean;
+exports.clean_all = series(clean, cleanmodules);
+exports.lint = lint;
 
 
 /*
