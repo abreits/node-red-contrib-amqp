@@ -8,3 +8,7 @@
 coverage
 node_modules
 transpiled
+
+# Package lock file - I felt the package-lock.json strategy was too weird, and it is easier
+# to use npm-check-updates, and just interact with package.json directly.
+package-lock.json

@@ -91,12 +91,19 @@ Topology configuration example:
 
 ## Known issues     <a name="knownissues"></a>
 - Entering invalid credentials (username/password) in the AMQP configuration node can cause node-red to malfunction
-- The underlying amqplib is pretty old; if this library is maintained, that will need to be brought forward
-
+- Package library 'amqlib' is outdated, requiring breaking changes
+- Build libraries 'typescript' and 'gulp-typescript' are outdated, requiring breaking changes
+- BUG: When bringing up node-red at start, outgoing node sits in 'connecting'.  Trivial change/deploy and it connects
+- POSSIBLE BUG: Observed along with the above bug, a message landing on the AMQP out node in the startup/non-connected state,
+  that presumably should have failed to send, then throw an exception which would be caught in a catch node,
+  is not throwing, and just failing silently
+- Very slow memory leak, unsure if this library, node-red in general, or outdated dependencies:
+	In a test container with an AMQP-out node, sending out 30 messages/sec, 
+	with starting memory footprint of ~110 MB, slowly drifts up to ~150 MB, over a four day period.
 
 ## What's new     <a name="whatsnew"></a>
 
-### version 0.4.5
+### version 0.4.6
 - Use Credentials/Credentials fields descriptions changed to 'Use Local CA File' and 'CA File Location' with accompanying functional change:
 - The 'CA File Location' field no longer specifies an explicit certificate, but a local disk location to load
 
@@ -110,8 +117,11 @@ Topology configuration example:
 - bugfix, 'Enable secure connection' + 'Use Local CA File' checkbox drives whether to use the 'CA File Location' field;
 
   before it would use the field even when the checkbox was unchecked
+- Library dependencies upgraded to address all non-low vulnerabilities.  Remaining low vulnerability will require upgrading
+  typescript and gulp-typescript, along with breaking updates.
 
-  
+### version 0.4.5
+- Unknown, just documenting this version existed.  It is available in NPM, but not documented here
 
 ### version 0.4.4
 - bugfix, topology editor not visible in amqp-server config node
@@ -138,9 +148,13 @@ Topology configuration example:
 
 
 ## Roadmap     <a name="roadmap"></a>
+- Resume active maintenance of the project into 2019!
+- I would like to see version 1.0.0 aim to accomplish:
+ * All dependencies upgraded to current
+ * Test suite in place
+ 
 
-The roadmap section describes things that I want to add or change in the (hopefully near) future.
 
-- Add extra features
-- Make testable
-- Add localization
+
+
+
