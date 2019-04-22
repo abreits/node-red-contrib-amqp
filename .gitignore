@@ -6,6 +6,7 @@
 
 # Build stuff
 coverage
+lib
 node_modules
 transpiled
 

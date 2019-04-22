@@ -17,6 +17,7 @@
       "amqp": "lib/amqp.js"
     }
   },
+  "files": "lib/*",
   "author": "Ab Reitsma",
   "license": "MIT",
   "repository": {
