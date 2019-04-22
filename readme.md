@@ -92,7 +92,10 @@ Topology configuration example:
 ## Known issues     <a name="knownissues"></a>
 - Entering invalid credentials (username/password) in the AMQP configuration node can cause node-red to malfunction
 - The underlying amqplib is pretty old; if this library is maintained, that will need to be brought forward
-
+- BUG: When bringing up node-red at start, outgoing node sits in 'connecting'.  Trivial change/deploy and it connects
+- POSSIBLE BUG: Observed along with the above bug, a message landing on the AMQP out node in the startup/non-connected state,
+  that presumably should have failed to send, then throw an exception which would be caught in a catch node,
+  is not throwing, and just failing silently
 
 ## What's new     <a name="whatsnew"></a>
 

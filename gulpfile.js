@@ -15,6 +15,7 @@ var tslint = require('gulp-tslint');
 //var sourcemaps = require('gulp-sourcemaps');
 //var mocha = require('gulp-spawn-mocha');
 
+// TODO a fresh npm install to show remaining deprecations
 var node_red_root = process.env.NODE_RED_ROOT;
 
 // swallow errors in watch
@@ -82,8 +83,8 @@ function copytolib(cb) {
 	cb();
 }
 
-exports.build = series(compile, copytolib); // TODO add copy-to-lib, test, copy-to-node-red
-exports.build_clean = series(clean, compile);
+exports.build = series(compile, copytolib); // TODO add test, copy-to-node-red
+exports.build_clean = series(clean, compile); // TODO add test
 exports.default = exports.build_clean;
 exports.clean = clean;
 exports.clean_all = series(clean, cleanmodules);
