@@ -3,15 +3,12 @@
  */
 const { src, dest, series } = require('gulp');
 
-//var gulp = require('gulp');
 var del = require('del');
 var concat = require('gulp-concat');
 var rename = require('gulp-rename');
 var addsrc = require('gulp-add-src');
 var ts = require('gulp-typescript');
 var tslint = require('gulp-tslint');
-
-// TODO a fresh npm install to show remaining deprecations
 
 //define typescript project
 var tsProject = ts.createProject({
