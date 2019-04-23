@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-amqp",
-  "version": "0.4.5",
+  "version": "1.0.0",
   "description": "Node-RED AMQP input and output nodes",
   "main": "index.js",
   "scripts": {
@@ -17,7 +17,9 @@
       "amqp": "lib/amqp.js"
     }
   },
-  "files": ["lib/*"],
+  "files": [
+    "lib/*"
+  ],
   "author": "Ab Reitsma",
   "license": "MIT",
   "repository": {
