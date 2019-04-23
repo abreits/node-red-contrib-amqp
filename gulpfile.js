@@ -65,9 +65,11 @@ function copytolib(cb) {
 	cb();
 }
 
-exports.build = series(compile, copytolib);
-exports.build_clean = series(clean, compile);
-exports.default = exports.build_clean;
+exports.build = compile;
+exports.build_release = series(compile, copytolib);
+exports.clean_build = series(clean, compile);
+exports.clean_build_release = series(clean, compile, copytolib);
+exports.default = exports.build_release;
 exports.clean = clean;
 exports.clean_all = series(clean, cleanmodules);
 exports.lint = lint;

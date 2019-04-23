@@ -103,16 +103,17 @@ Topology configuration example:
 
 ## What's new     <a name="whatsnew"></a>
 
-### version 0.4.6
+### version 1.0.0
 - Use Credentials/Credentials fields descriptions changed to 'Use Local CA File' and 'CA File Location' with accompanying functional change:
 - The 'CA File Location' field no longer specifies an explicit certificate, but a local disk location to load
 
-  This is important as many certs have binary data in them, which is incompatible with a copy/paste in NodeRed GUI
+  This is important as many certs have binary data in them, which is incompatible with a copy/paste in NodeRed GUI.
 - When a custom CA file location is not specified, an attempt is made to load the default system CA certificate
 
   Currently default supports ubuntu and alpine. 
 
-  Other distros should contribute their locations to this project as desired, but could still manually enter the location to be able to enjoy the functionality
+  Other distros should contribute their locations to this project as desired, but could still manually enter the location to be able to enjoy the functionality.
+  If you were previously using non-system-default cert text in an AMQP node, this update would be a breaking change.
 - Some small GUI quality of life improvement to disable/enable TLS related fields when TLS enabled checkbox is exercised
 - bugfix, 'Enable secure connection' + 'Use Local CA File' checkbox drives whether to use the 'CA File Location' field;
 
@@ -149,7 +150,7 @@ Topology configuration example:
 
 ## Roadmap     <a name="roadmap"></a>
 - Resume active maintenance of the project into 2019!
-- I would like to see version 1.0.0 aim to accomplish:
+- I would like to see version 1.1.0 aim to accomplish:
  * All dependencies upgraded to current
  * Test suite in place
  

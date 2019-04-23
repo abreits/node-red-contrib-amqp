@@ -6,8 +6,10 @@
 
 # Build stuff
 coverage
+lib
 node_modules
 transpiled
+node-red-contrib-amqp-*.tgz
 
 # Package lock file - I felt the package-lock.json strategy was too weird, and it is easier
 # to use npm-check-updates, and just interact with package.json directly.
