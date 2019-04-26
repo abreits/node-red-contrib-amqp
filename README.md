@@ -103,6 +103,9 @@ Topology configuration example:
 
 ## What's new     <a name="whatsnew"></a>
 
+### version 1.0.1
+- bugfix, introduced by v1.0.0: Connections would not establish on startup, but would after a deploy.
+
 ### version 1.0.0
 - Use Credentials/Credentials fields descriptions changed to 'Use Local CA File' and 'CA File Location' with accompanying functional change:
 - The 'CA File Location' field no longer specifies an explicit certificate, but a local disk location to load

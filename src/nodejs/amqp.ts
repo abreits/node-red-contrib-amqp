@@ -1,5 +1,13 @@
 import * as amqp from "amqp-ts";
 
+const fs = require("fs");
+const getos = require("getos");
+const util = require("util");
+const getOsPromise = util.promisify(getos);
+
+var osDistroLowerCase;
+const defaultCaFileLocation = "/etc/ssl/certs/ca-certificates.crt";
+
 module.exports = function(RED) {
   "use strict";
 
@@ -8,7 +16,15 @@ module.exports = function(RED) {
   function initialize(node) {
     if (node.server) {
       node.status({fill: "green", shape: "ring", text: "connecting"});
-      node.server.claimConnection().then(function () {
+
+      // Get the OS information before connecting initially
+      getOsPromise().then(function(result) {
+		osDistroLowerCase = result.dist.toLowerCase();
+		return node.server.claimConnection();
+	  }, function(err) {
+		console.error(err);
+	  })
+	  .then(function () {
         // node.ioType is a string with the following meaning:
         // "0": direct exchange
         // "1": fanout exchange
@@ -122,8 +138,7 @@ module.exports = function(RED) {
     initialize(node);
   }
 
-const fs = require("fs");
-const getos = require("getos");
+
 //
 //-- AMQP SERVER --------------------------------------------------------------
 //
@@ -166,39 +181,27 @@ const getos = require("getos");
 			ca: []
 		};
 
-		// Get the distribution information so we load the proper CA-cert file
-		getos(function(e, os) {
-            if (e) {
-                return console.log(e);
-            }
-            console.log("Your OS is:" + JSON.stringify(os));
-
-            // We only need to OS check for TLS connections
-            if (node.useTls) {
-                if (node.useca) {
-                    console.log("Using custom CA file: " + node.ca);
-                    opt.ca = fs.readFileSync(node.ca);
-                } else {
-
-                    var defaultCaFileLocation = "/etc/ssl/certs/ca-certificates.crt";
-
-                    // FUTURE: This block should be locating the proper ca-cert for this distro.
-                    var lowercasedist = os.dist.toLowerCase();
-                    if (lowercasedist.includes("ubuntu") || lowercasedist.includes("alpine")) {
-                        console.log("Ubuntu or Alpine OS detected, using CA file: " + defaultCaFileLocation);
-                        opt.ca = fs.readFileSync(defaultCaFileLocation);
-                    } else { // Alternate OS's would need else-if blocks here
-                        console.log("Unable to determine the local distro, defaulting to CA file: " + defaultCaFileLocation);
-                        opt.ca = fs.readFileSync(defaultCaFileLocation);
-                    }
-                }
+		// We only need to OS check for TLS connections
+        if (node.useTls) {
+            if (node.useca) {
+                node.log("Using custom CA file: " + node.ca);
+                opt.ca = fs.readFileSync(node.ca);
             } else {
-                console.log("Initializing in-clear AMQP connection");
-            }
 
-            node.connection = new amqp.Connection(urlType + credentials + urlLocation, opt);
-         }, node
-        );
+                // FUTURE: This block should be locating the proper ca-cert for this distro.
+                if (osDistroLowerCase.includes("ubuntu") || osDistroLowerCase.includes("alpine")) {
+                    node.log("Ubuntu or Alpine OS detected, using CA file: " + defaultCaFileLocation);
+                    opt.ca = fs.readFileSync(defaultCaFileLocation);
+                } else { // Alternate OS's would need else-if blocks here
+                    node.log("Unable to determine the local distro, defaulting to CA file: " + defaultCaFileLocation);
+                    opt.ca = fs.readFileSync(defaultCaFileLocation);
+                }
+
+            }
+        } else {
+            node.log("Initializing in-clear AMQP connection");
+        }
+        node.connection = new amqp.Connection(urlType + credentials + urlLocation, opt);
 
 		// Wait for initialization
         node.connectionPromise = node.connection.initialized.then(function () {
