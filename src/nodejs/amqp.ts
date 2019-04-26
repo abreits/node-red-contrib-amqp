@@ -6,6 +6,7 @@ const util = require("util");
 const getOsPromise = util.promisify(getos);
 
 var osDistroLowerCase;
+var defaultCaFileLocation = "/etc/ssl/certs/ca-certificates.crt";
 
 module.exports = function(RED) {
   "use strict";
@@ -186,8 +187,6 @@ module.exports = function(RED) {
                 node.log("Using custom CA file: " + node.ca);
                 opt.ca = fs.readFileSync(node.ca);
             } else {
-
-                var defaultCaFileLocation = "/etc/ssl/certs/ca-certificates.crt";
 
                 // FUTURE: This block should be locating the proper ca-cert for this distro.
                 if (osDistroLowerCase.includes("ubuntu") || osDistroLowerCase.includes("alpine")) {
