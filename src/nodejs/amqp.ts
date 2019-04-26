@@ -6,7 +6,7 @@ const util = require("util");
 const getOsPromise = util.promisify(getos);
 
 var osDistroLowerCase;
-var defaultCaFileLocation = "/etc/ssl/certs/ca-certificates.crt";
+const defaultCaFileLocation = "/etc/ssl/certs/ca-certificates.crt";
 
 module.exports = function(RED) {
   "use strict";
