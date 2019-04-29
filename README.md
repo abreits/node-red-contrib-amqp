@@ -93,13 +93,6 @@ Topology configuration example:
 - Entering invalid credentials (username/password) in the AMQP configuration node can cause node-red to malfunction
 - Package library 'amqlib' is outdated, requiring breaking changes
 - Build libraries 'typescript' and 'gulp-typescript' are outdated, requiring breaking changes
-- BUG: When bringing up node-red at start, outgoing node sits in 'connecting'.  Trivial change/deploy and it connects
-- POSSIBLE BUG: Observed along with the above bug, a message landing on the AMQP out node in the startup/non-connected state,
-  that presumably should have failed to send, then throw an exception which would be caught in a catch node,
-  is not throwing, and just failing silently
-- Very slow memory leak, unsure if this library, node-red in general, or outdated dependencies:
-	In a test container with an AMQP-out node, sending out 30 messages/sec, 
-	with starting memory footprint of ~110 MB, slowly drifts up to ~150 MB, over a four day period.
 
 ## What's new     <a name="whatsnew"></a>
 
