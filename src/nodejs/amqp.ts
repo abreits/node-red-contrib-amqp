@@ -19,12 +19,15 @@ module.exports = function(RED) {
 
       // Get the OS information before connecting initially
       getOsPromise().then(function(result) {
-		osDistroLowerCase = result.dist.toLowerCase();
-		return node.server.claimConnection();
-	  }, function(err) {
-		console.error(err);
-	  })
-	  .then(function () {
+        // windows and macos don't have 'dist'
+        const os = result.dist ? result.dist : result.os;
+
+        osDistroLowerCase = os.toLowerCase();
+        return node.server.claimConnection();
+	    }, function(err) {
+		    console.error(err);
+      })
+      .then(function () {
         // node.ioType is a string with the following meaning:
         // "0": direct exchange
         // "1": fanout exchange
