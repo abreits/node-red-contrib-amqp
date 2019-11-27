@@ -89,10 +89,28 @@ module.exports = function(RED) {
     // node specific initialization code
     node.initialize = function () {
       function Consume(msg) {
+
+        // ref: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Errors/Cyclic_object_value
+        // Not sure if this is a bug in node-red or the contrib module
+        // but any time the node is cloned it'll fail with TypeError: Cannot assign to read only property 'writeQueueSize' of object '#<TCP>'
+        // This is a hacky way of creating a clone of the message object but at least it doesn't fail
+        const stringifiedMsg = JSON.stringify(msg, (() => {
+          const seen = new WeakSet();
+          return (key, value) => {
+            if (typeof value === "object" && value !== null) {
+              if (seen.has(value)) {
+                return;
+              }
+              seen.add(value);
+            }
+            return value;
+          };
+        })());
+
         node.send({
           topic: node.topic || msg.fields.routingKey,
           payload: msg.getContent(),
-          amqpMessage: msg
+          amqpMessage: JSON.parse(stringifiedMsg)
         });
       }
 
